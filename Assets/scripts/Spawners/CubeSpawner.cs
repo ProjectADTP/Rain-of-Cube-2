@@ -21,13 +21,11 @@ public class CubeSpawner : Spawner<Cube>
         OnObjectReturnedWithPosition -= HandleCubeReturned;
     }
 
-    protected override void OnObjectDestroyed(IPoolable obj)
+    protected override void OnObjectDestroyed(Cube cube)
     {
-        Cube cube = (Cube)obj;
-
         _cubePositions.Add(cube.transform.position);
 
-        base.OnObjectDestroyed(obj);
+        base.OnObjectDestroyed(cube);
     }
 
     private void HandleCubeReturned(Vector3 position)

@@ -863,7 +863,6 @@ GameObject:
   - component: {fileID: 392601961}
   - component: {fileID: 392601960}
   - component: {fileID: 392601959}
-  - component: {fileID: 392601963}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -955,26 +954,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &392601963
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 392601958}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 454b3f1d3dad4824aabbfc4e5e992e9d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _cubeSpawner: {fileID: 543146567}
-  _cubeSpawnedText: {fileID: 605627199}
-  _cubeCreatedText: {fileID: 1231233436}
-  _cubeActiveText: {fileID: 894344207}
-  _bombSpawner: {fileID: 993983876}
-  _bombSpawnedText: {fileID: 79376485}
-  _bombCreatedText: {fileID: 1147285007}
-  _bombActiveText: {fileID: 1836475982}
 --- !u!1 &452490443
 GameObject:
   m_ObjectHideFlags: 0
@@ -1514,6 +1493,7 @@ GameObject:
   - component: {fileID: 767992525}
   - component: {fileID: 767992527}
   - component: {fileID: 767992526}
+  - component: {fileID: 767992528}
   m_Layer: 5
   m_Name: CubePanel
   m_TagString: Untagged
@@ -1582,6 +1562,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 767992524}
   m_CullTransparentMesh: 1
+--- !u!114 &767992528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 767992524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73cdd1ee4a2965243a2cb022ccba9748, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Spawner: {fileID: 543146567}
+  SpawnedText: {fileID: 605627199}
+  CreatedText: {fileID: 1231233436}
+  ActiveText: {fileID: 894344207}
 --- !u!1 &777727769
 GameObject:
   m_ObjectHideFlags: 0
@@ -1797,6 +1793,7 @@ GameObject:
   - component: {fileID: 988899935}
   - component: {fileID: 988899937}
   - component: {fileID: 988899936}
+  - component: {fileID: 988899938}
   m_Layer: 5
   m_Name: BombPanel
   m_TagString: Untagged
@@ -1865,6 +1862,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 988899934}
   m_CullTransparentMesh: 1
+--- !u!114 &988899938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 988899934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90cf2e737be156c489ebdaaf480773c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Spawner: {fileID: 993983876}
+  SpawnedText: {fileID: 79376485}
+  CreatedText: {fileID: 1147285007}
+  ActiveText: {fileID: 1836475982}
 --- !u!1 &993983874
 GameObject:
   m_ObjectHideFlags: 0
@@ -1913,8 +1926,8 @@ MonoBehaviour:
   _poolSize: 10
   _poolMaxSize: 20
   _spawnTime: 1
-  _explosionRadius: 5
-  _explosionForce: 250
+  _explosionRadius: 15
+  _explosionForce: 150
 --- !u!1001 &1041790286
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -11,9 +11,13 @@ public class ColorChanger : MonoBehaviour
         _targetMaterial = material;
     }
 
-    public Color ChangeToRandomColor()
+    public void ChangeToRandomColor()
     {
-        return new Color(Random.value, Random.value, Random.value);
+        Color newColor = Random.ColorHSV();
+
+        newColor.a = newColor.maxColorComponent;
+
+        _targetMaterial.color = newColor;
     }
 
     public void ChangeAlpha(float targetAlpha, float fadeTime) 

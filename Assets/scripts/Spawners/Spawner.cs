@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public abstract class Spawner<T> : MonoBehaviour where T : MonoBehaviour, IPoolable
+public abstract class Spawner<T> : MonoBehaviour where T : MonoBehaviour, IPoolable<T>
 {
     [SerializeField] protected T _prefab;
     [SerializeField] protected int _poolSize = 10;
@@ -14,6 +14,8 @@ public abstract class Spawner<T> : MonoBehaviour where T : MonoBehaviour, IPoola
     protected float _rangeSpawn = 10f;
 
     protected WaitForSeconds _wait;
+
+    public event Action<T> OnObjectStateChanged;
 
     public event Action<Vector3> OnObjectReturnedWithPosition;
 
@@ -36,16 +38,26 @@ public abstract class Spawner<T> : MonoBehaviour where T : MonoBehaviour, IPoola
             createFunc: () => 
             {
                 T obj = Instantiate(_prefab, transform);
-                TotalCreated++; 
+                TotalCreated++;
+                obj.Initialize(OnObjectDestroyed);
+
+                OnObjectStateChanged.Invoke(obj);
 
                 return obj;
             },
             actionOnGet: obj => 
             {
                 obj.gameObject.SetActive(true);
-                TotalSpawned++; 
+                TotalSpawned++;
+
+                OnObjectStateChanged.Invoke(obj);
             },
-            actionOnRelease: obj => obj.gameObject.SetActive(false),
+            actionOnRelease: obj =>
+            {
+                obj.gameObject.SetActive(false);
+
+                OnObjectStateChanged.Invoke(obj);
+            },
             actionOnDestroy: obj => Destroy(obj),
             collectionCheck: false,
             defaultCapacity: _poolSize,
@@ -76,18 +88,17 @@ public abstract class Spawner<T> : MonoBehaviour where T : MonoBehaviour, IPoola
         }
     }
 
-    protected virtual void OnObjectDestroyed(IPoolable obj)
+    protected virtual void OnObjectDestroyed(T obj)
     {
-        T item = (T)obj;
-        Vector3 position = item.transform.position;
+        Vector3 position = obj.transform.position;
 
-        _pool.Release(item);
+        _pool.Release(obj);
 
         OnObjectReturnedWithPosition?.Invoke(position);
     }
 }
 
-public interface IPoolable
+public interface IPoolable<T> where T : MonoBehaviour
 {
-    void Initialize(Action<IPoolable> onDestroyAction);
+    public void Initialize(Action<T> onDestroyAction);
 }

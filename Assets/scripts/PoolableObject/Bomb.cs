@@ -1,24 +1,25 @@
+using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class Bomb : PoolableObject
+public class Bomb : PoolableObject, IPoolable<Bomb>
 {
     private float _explosionRadius;
     private float _explosionForce;
+
+    private Action<Bomb> _onDestroy;
 
     protected override void Awake()
     {
         base.Awake();
 
         Renderer.material.SetFloat("_Mode", 3);
-        ColorChanger.Initialize(Renderer.material);
     }
 
-    public override void ResetState()
+    public void Initialize(Action<Bomb> onDestroyAction)
     {
-        base.ResetState();
-
-        Renderer.material.color = Color.black;
+        _onDestroy = onDestroyAction;
     }
 
     public void SetupBomb(float explosionRadius, float explosionForce)
@@ -26,19 +27,16 @@ public class Bomb : PoolableObject
         _explosionRadius = explosionRadius;
         _explosionForce = explosionForce;
 
-        ResetBomb();
+        ResetState();
 
         StartCoroutine(FadeAndExplode());
     }
 
-    private void ResetBomb()
+    public override void ResetState()
     {
+        base.ResetState();
+
         Renderer.material.color = Color.black;
-
-        Rigidbody.velocity = Vector3.zero;
-        Rigidbody.angularVelocity = Vector3.zero;
-
-        transform.rotation = Quaternion.identity;
     }
 
     private IEnumerator FadeAndExplode()
@@ -49,7 +47,7 @@ public class Bomb : PoolableObject
 
         Explode();
 
-        OnDestroyAction?.Invoke(this);
+        _onDestroy?.Invoke(this);
     }
 
     private void Explode()

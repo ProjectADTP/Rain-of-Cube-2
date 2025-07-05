@@ -5,9 +5,8 @@ using System.Collections;
 [RequireComponent(typeof(ColorChanger))]
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Renderer))]
-public abstract class PoolableObject : MonoBehaviour, IPoolable
+public abstract class PoolableObject : MonoBehaviour
 {
-    [Header("Common Settings")]
     [SerializeField] protected float MinLiveTime;
     [SerializeField] protected float MaxLiveTime;
 
@@ -15,7 +14,6 @@ public abstract class PoolableObject : MonoBehaviour, IPoolable
     protected Rigidbody Rigidbody;
     protected Renderer Renderer;
 
-    protected Action<IPoolable> OnDestroyAction;
     protected bool HasCollided = false;
 
     protected float LifeTime;
@@ -27,11 +25,8 @@ public abstract class PoolableObject : MonoBehaviour, IPoolable
         Renderer = GetComponent<Renderer>();
 
         LifeTime = UnityEngine.Random.Range(MinLiveTime, MaxLiveTime);
-    }
 
-    public void Initialize(Action<IPoolable> onDestroyAction)
-    {
-        OnDestroyAction = onDestroyAction;
+        ColorChanger.Initialize(Renderer.material);
     }
 
     public virtual void ResetState()
@@ -39,20 +34,9 @@ public abstract class PoolableObject : MonoBehaviour, IPoolable
         Rigidbody.velocity = Vector3.zero;
         Rigidbody.angularVelocity = Vector3.zero;
 
-        Renderer.material.color = Color.white;
-
         transform.position = Vector3.zero;
         transform.rotation = Quaternion.identity;
 
         HasCollided = false;
-    }
-
-    protected IEnumerator ReturnToPoolAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-
-        OnDestroyAction?.Invoke(this);
-
-        ResetState();
     }
 }

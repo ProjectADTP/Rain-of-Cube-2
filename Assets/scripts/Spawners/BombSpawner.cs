@@ -12,7 +12,6 @@ public class BombSpawner : Spawner<Bomb>
         if (bomb != null)
         {
             bomb.transform.position = position;
-            bomb.Initialize(OnObjectDestroyed); 
             bomb.SetupBomb(_explosionRadius, _explosionForce);
         }
     }
